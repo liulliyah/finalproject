@@ -1,0 +1,22 @@
+import pyodbc
+import matplotlib.pyplot as plt
+cnxn = pyodbc.connect('Driver={SQL Server};'
+                      'Server=DESKTOP-8BVD8QS;'
+                      'Database=datashareits;'
+                      'Trusted_Connection=yes;')
+
+cursor = cnxn.cursor()
+def readtextb():
+    cursor = cnxn.cursor()
+    sqlselect = (
+        'SELECT COUNT(NamaDosen) as JumlahAkses, Fakultas FROM dbo.Dosen GROUP BY NamaDosen, Fakultas ')
+
+    cursor.execute(sqlselect)
+    results = cursor.fetchall()
+    print(results)
+
+    plt.hist(results)
+    plt.show()
+
+
+readtextb()

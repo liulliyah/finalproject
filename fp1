@@ -1,0 +1,32 @@
+import pyodbc
+import matplotlib.pyplot as plt
+cnxn = pyodbc.connect('Driver={SQL Server};'
+                      'Server=DESKTOP-8BVD8QS;'
+                      'Database=datashareits;'
+                      'Trusted_Connection=yes;')
+
+cursor = cnxn.cursor()
+def readtexta():
+    cursor = cnxn.cursor()
+    sqlselect = ('SELECT distinct count ([NamaDosen]) AS jumlahakses, Fakultas FROM [datashareits].[dbo].[Dosen] GROUP BY Fakultas')
+
+    cursor.execute(sqlselect)
+
+
+    row = cursor.fetchone()
+
+    Fakultas = []
+    jumlahakses = []
+
+    while row:
+        Fakultas.append(row[0])
+        jumlahakses.append(row[1])
+        row = cursor.fetchone()
+
+    plt.bar(jumlahakses,Fakultas )
+    plt.show()
+
+readtexta()
+
+
+

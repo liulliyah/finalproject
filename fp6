@@ -1,0 +1,28 @@
+import pyodbc
+import matplotlib.pyplot as plt
+cnxn = pyodbc.connect('Driver={SQL Server};'
+                      'Server=DESKTOP-8BVD8QS;'
+                      'Database=datashareits;'
+                      'Trusted_Connection=yes;')
+
+cursor = cnxn.cursor()
+def readtextc():
+    cursor = cnxn.cursor()
+    sqlselect = (
+        'SELECT TOP 10 M.NamaMhs, M.JurusanMhs,COUNT(M.NamaMhs) AS jmlakses FROM dbo.Mahasiswa M join dbo.Login L on M.NamaMhs=L.users WHERE L.days <= 190 GROUP BY M.NamaMhs,M.JurusanMhs HAVING (COUNT(M.NamaMhs) > 1) ORDER BY jmlakses DESC')
+
+    cursor.execute(sqlselect)
+    results = cursor.fetchall()
+    print(results)
+    row = cursor.fetchone()
+
+    NamaMhs = []
+    jmlakses = []
+
+    while row:
+        NamaMhs.append(row[0])
+        jmlakses.append(row[1])
+        row = cursor.fetchone()
+    plt.bar(NamaMhs,jmlakses)
+    plt.show()
+readtextc()

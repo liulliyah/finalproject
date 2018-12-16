@@ -1,0 +1,33 @@
+import pyodbc
+import matplotlib.pyplot as plt
+cnxn = pyodbc.connect('Driver={SQL Server};'
+                      'Server=DESKTOP-8BVD8QS;'
+                      'Database=datashareits;'
+                      'Trusted_Connection=yes;')
+
+cursor = cnxn.cursor()
+def readtextc():
+    cursor = cnxn.cursor()
+    sqlselect = (
+        'SELECT TOP (3) NamaDosen, COUNT(NamaDosen) as JumlahAkses, Jurusan FROM dbo.Dosen GROUP BY NamaDosen, Jurusan ORDER BY JumlahAkses DESC')
+
+    cursor.execute(sqlselect)
+    '''results = cursor.fetchall()
+    print(results)'''
+
+    row = cursor.fetchone()
+
+    Jurusan = []
+    JumlahAkses = []
+
+    while row:
+        Jurusan.append(row[0])
+        JumlahAkses.append(row[1])
+        row = cursor.fetchone()
+
+    plt.bar(Jurusan,JumlahAkses)
+    plt.show()
+
+
+
+readtextc()
